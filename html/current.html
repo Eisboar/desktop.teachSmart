@@ -1,0 +1,75 @@
+<html>
+    <body onload="connectSlots()">
+    <script type="text/javascript">
+
+    </script>
+
+<!-- [ images list ] -->
+    <div align="center" id="visualization" style="width: 720px; height: 320px;"></div>
+    <div style="float:right; width:50%; border-left: solid 1px black">
+               <!-- <input type="button" id="evalbutton" value="Analyze" onclick="analyzeImages()" />-->
+               <input type="button" id="evalbutton" value="Analyze" onclick="drawVisualization()"/>
+        </div>
+    </body>
+</html>
+
+<script type="text/javascript">
+    var remaining = 0;
+    var connected = false;
+    //We use this function because connect statements resolve their target once, imediately
+    //not at signal emission so they must be connected once the imageAnalyzer object has been added to the frame
+    //! <!--  [ connect slots ] -->
+    function connectSlots()
+    {
+        if ( !connected ) {
+            connected = true;
+            diagramm.updateProgress.connect(this, updateProg);
+        }
+    }
+    //! <!--  [ connect slots ] -->
+
+
+    //This will function as the recieving "slot" for the progress signal
+    function updateProg(complete)
+    {
+
+    drawVisualization();
+
+    }
+
+//! <!--  [ addImage ] -->
+</script>
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load('visualization', '1', {packages: ['corechart']});
+    </script>
+    <script type="text/javascript">
+      function drawVisualization() {
+       connectSlots();
+ diagramm.startAnalysis(0);
+     // Create and populate the data table.
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Task');
+        data.addColumn('number', 'Hours per Day');
+        var keys = Object.keys(diagramm.values);
+
+        data.addRows(keys.length);
+
+        for (var i = 0; i < keys.length; i++) {
+            data.setValue(i, 0, keys[i]);
+            data.setValue(i, 1, diagramm.values[keys[i]]);
+        }
+
+
+
+        //data.setValue(3, 0, 'Watch TV');
+        //data.setValue(3, 1, 2);
+        //data.setValue(4, 0, 'Sleep');
+        //data.setValue(4, 1, 7);
+
+        // Create and draw the visualization.
+        new google.visualization.PieChart(document.getElementById('visualization')).
+            draw(data, {title: diagramm.title});
+      }
+      google.setOnLoadCallback(drawVisualization);
+</script>

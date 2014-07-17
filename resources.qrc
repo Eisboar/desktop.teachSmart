@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/refresh.jpeg</file>
+        <file>html/piechart_template.html</file>
+        <file>html/current.html</file>
+    </qresource>
+</RCC>
